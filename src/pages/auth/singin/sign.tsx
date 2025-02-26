@@ -1,5 +1,5 @@
 import { Button, Form, Input, Image, Flex } from "antd";
-import signupImage from "../../../assets/images/signImg.jpg";
+import signInImage from "../../../assets/images/signImg.jpg";
 import logoImage from "../../../assets/images/NobgLogo.png";
 import styles from "./signin.module.css";
 import globalStyles from "../../global.module.css";
@@ -11,7 +11,7 @@ const Singin = () => {
   return (
     <Flex vertical={false} className={styles.flexContainer}>
       <div id="right-container" className={styles.rightContainer}>
-        <Image src={signupImage} preview={false} style={{ borderRadius: 18 }} />
+        <Image src={signInImage} preview={false} style={{ borderRadius: 18 }} />
       </div>
       <div id="left-container" className={styles.leftContainer}>
         <Image

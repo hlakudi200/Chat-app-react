@@ -1,6 +1,6 @@
 import { Button, Form, Input, Image, Flex } from "antd";
-import signupImage from "../../../../public/assets/images/signImg.jpg";
-import logoImage from "../../../../public/assets/images/NobgLogo.png"
+import signupImage from "../../../assets/images/signImg.jpg";
+import logoImage from "../../../assets/images/NobgLogo.png";
 import styles from "./signup.module.css";
 import globalStyles from "../../global.module.css";
 
