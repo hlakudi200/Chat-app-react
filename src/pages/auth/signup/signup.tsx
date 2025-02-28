@@ -1,11 +1,11 @@
-import { Button, Form, Input, Image, Flex } from "antd";
+import { Button, Form, Input, Image, Flex,message } from "antd";
 import signupImage from "../../../assets/images/signImg.jpg";
 import logoImage from "../../../assets/images/NobgLogo.png";
 import styles from "./signup.module.css";
 import globalStyles from "../../global.module.css";
 import { useNavigate } from "react-router";
 import { useState } from "react";
-import supabase from "../../../config/client";
+import { useAuth } from "../../../provider/authprovider/authProvider";
 
 const inputClasses: string = `${globalStyles.inputBox} ${globalStyles.inputBox}`;
 const Signup = () => {
@@ -13,6 +13,7 @@ const Signup = () => {
   const [email, setEmail] = useState("");
   const [role, setRole] = useState("");
   const [password, setPassword] = useState("");
+  const { singUp } = useAuth();
 
   const navigate = useNavigate();
 
@@ -20,47 +21,22 @@ const Signup = () => {
     navigate("/");
   };
 
-  //user interface
-  interface User {
-    userName: string;
-    email: string;
-    role: string;
-    password: string;
-  }
   const handleSignUp = () => {
-    SignUp({
-      userName: userName,
-      email: email,
-      role: role,
-      password: password,
-    });
-  };
+    if (role === "----Select role----" || role == "") {
+      alert("Please select an valid role option");
+      return null;
+    }
+    if (password.length < 8) {
+      alert("Password must be 8 characters");
+    }
 
-  //sign upfunction with auth
-  const SignUp = async (user: User) => {
-    //sign up a user
-    const { data, error } = await supabase.auth.signUp({
-      email: user.email,
-      password: user.password,
-    });
-
-    const userData = data.user;
-
-    if (userData) {
-      //insert into the users profile using the userid
-      const { error: ProfilError } = await supabase
-        .from('profile')
-        .insert({ id: userData.id, role: user.role, username: user.userName });
-      if (ProfilError) {
-        alert(`${ProfilError.message}`);
-      } else {
+    singUp(email, password, role, userName)
+      .then(() => {
         navigate("/");
-      }
-    }
-
-    if (error) {
-      alert(`${error.message}`);
-    }
+      })
+      .catch(() => {
+        alert(`Failed to sing up ${message.error}`);
+      });
   };
 
   return (
@@ -83,6 +59,7 @@ const Signup = () => {
               className={globalStyles.inputBox}
               value={userName}
               onChange={(e) => setUserName(e.target.value)}
+              required
             />
           </Form.Item>
           <Form.Item
@@ -99,15 +76,18 @@ const Signup = () => {
               onChange={(e) => setEmail(e.target.value)}
             />
           </Form.Item>
-          <Form.Item>
+          <Form.Item
+            rules={[{ required: true, message: "Please select an option" }]}
+          >
             <select
               id="role"
               className={globalStyles.select}
               name="user-role"
               value={role}
               onChange={(e) => setRole(e.target.value)}
+              required
             >
-              <option value="role">----Select role----</option>
+              <option>----Select role----</option>
               <option value="Software Developer">Software Developer</option>
               <option value="Business Analyst">Business Analyst</option>
             </select>
@@ -118,13 +98,14 @@ const Signup = () => {
               className={globalStyles.inputBox}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              required
             />
           </Form.Item>
           <Form.Item>
             <Button
               type="primary"
               className={globalStyles.primaryBtn}
-              onClick={handleSignUp }
+              onClick={handleSignUp}
             >
               Sign Up
             </Button>

@@ -1,43 +1,33 @@
-import { Button, Form, Input, Image, Flex } from "antd";
+import { Button, Form, Input, Image, Flex, message } from "antd";
 import signInImage from "../../../assets/images/signImg.jpg";
 import logoImage from "../../../assets/images/NobgLogo.png";
 import styles from "./signin.module.css";
 import globalStyles from "../../global.module.css";
 import { useNavigate } from "react-router";
 import { useState } from "react";
-import supabase from "../../../config/client";
+import { useAuth } from "../../../provider/authprovider/authProvider";
 
 const inputClasses: string = `${globalStyles.inputBox} ${globalStyles.inputBox}`;
+
 const Singin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
+  const { signIn } = useAuth();
   const navigate = useNavigate();
 
-  interface User {
-    email: string;
-    password: string;
-  }
-  const  handleSingIn=()=>{
-    Singin({email:email,password:password})
-  }
-  const Singin = async (user: User) => {
-    const { data: Userdata, error } = await supabase.auth.signInWithPassword({
-      email: user.email,
-      password: user.password,
-    });
-
-    if (Userdata) {
-      navigate("/about");
+  const handleSingIn = async () => {
+    if (email.trim() === "" || password.trim() == "") {
+      alert("Empty Fields");
+      return null;
     }
-
-    if (error) {
-      alert(`${error.message}`);
-    }
+    signIn(email, password).then(()=>navigate('/about')).catch(()=>{alert(`${message.error}`)});
   };
+
+
   const HandleLinkClick = () => {
     navigate("/Singup");
   };
+
   return (
     <Flex vertical={false} className={styles.flexContainer}>
       <div id="right-container" className={styles.rightContainer}>
