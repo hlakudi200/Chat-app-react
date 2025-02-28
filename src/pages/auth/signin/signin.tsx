@@ -1,72 +1,47 @@
 import { Button, Form, Input, Image, Flex } from "antd";
-import signupImage from "../../../assets/images/signImg.jpg";
+import signInImage from "../../../assets/images/signImg.jpg";
 import logoImage from "../../../assets/images/NobgLogo.png";
-import styles from "./signup.module.css";
+import styles from "./signin.module.css";
 import globalStyles from "../../global.module.css";
 import { useNavigate } from "react-router";
 import { useState } from "react";
 import supabase from "../../../config/client";
 
 const inputClasses: string = `${globalStyles.inputBox} ${globalStyles.inputBox}`;
-const Signup = () => {
-  const [userName, setUserName] = useState("");
+const Singin = () => {
   const [email, setEmail] = useState("");
-  const [role, setRole] = useState("");
   const [password, setPassword] = useState("");
 
   const navigate = useNavigate();
 
-  const HandleLinkClick = () => {
-    navigate("/");
-  };
-
-  //user interface
   interface User {
-    userName: string;
     email: string;
-    role: string;
     password: string;
   }
-  const handleSignUp = () => {
-    SignUp({
-      userName: userName,
-      email: email,
-      role: role,
-      password: password,
-    });
-  };
-
-  //sign upfunction with auth
-  const SignUp = async (user: User) => {
-    //sign up a user
-    const { data, error } = await supabase.auth.signUp({
+  const  handleSingIn=()=>{
+    Singin({email:email,password:password})
+  }
+  const Singin = async (user: User) => {
+    const { data: Userdata, error } = await supabase.auth.signInWithPassword({
       email: user.email,
       password: user.password,
     });
 
-    const userData = data.user;
-
-    if (userData) {
-      //insert into the users profile using the userid
-      const { error: ProfilError } = await supabase
-        .from('profile')
-        .insert({ id: userData.id, role: user.role, username: user.userName });
-      if (ProfilError) {
-        alert(`${ProfilError.message}`);
-      } else {
-        navigate("/");
-      }
+    if (Userdata) {
+      navigate("/about");
     }
 
     if (error) {
       alert(`${error.message}`);
     }
   };
-
+  const HandleLinkClick = () => {
+    navigate("/Singup");
+  };
   return (
     <Flex vertical={false} className={styles.flexContainer}>
       <div id="right-container" className={styles.rightContainer}>
-        <Image src={signupImage} preview={false} style={{ borderRadius: 18 }} />
+        <Image src={signInImage} preview={false} style={{ borderRadius: 18 }} />
       </div>
       <div id="left-container" className={styles.leftContainer}>
         <Image
@@ -75,16 +50,8 @@ const Signup = () => {
           preview={false}
           width={"50%"}
         />
-        <div className={styles.singinText}>Sign Up</div>
+        <div className={styles.singinText}>Sign in</div>
         <Form className={styles.signUpForm}>
-          <Form.Item>
-            <Input
-              placeholder="Username"
-              className={globalStyles.inputBox}
-              value={userName}
-              onChange={(e) => setUserName(e.target.value)}
-            />
-          </Form.Item>
           <Form.Item
             rules={[
               { required: true, message: "Please enter your email" },
@@ -100,19 +67,6 @@ const Signup = () => {
             />
           </Form.Item>
           <Form.Item>
-            <select
-              id="role"
-              className={globalStyles.select}
-              name="user-role"
-              value={role}
-              onChange={(e) => setRole(e.target.value)}
-            >
-              <option value="role">----Select role----</option>
-              <option value="Software Developer">Software Developer</option>
-              <option value="Business Analyst">Business Analyst</option>
-            </select>
-          </Form.Item>
-          <Form.Item>
             <Input.Password
               placeholder="Password"
               className={globalStyles.inputBox}
@@ -124,13 +78,14 @@ const Signup = () => {
             <Button
               type="primary"
               className={globalStyles.primaryBtn}
-              onClick={handleSignUp }
+              onClick={handleSingIn}
             >
-              Sign Up
+              Sign In
             </Button>
           </Form.Item>
+
           <p className={styles.urlText} onClick={HandleLinkClick}>
-            Already have an account ? sign in.
+            Don't have an account ? sign up.
           </p>
         </Form>
       </div>
@@ -138,4 +93,4 @@ const Signup = () => {
   );
 };
 
-export default Signup;
+export default Singin;
