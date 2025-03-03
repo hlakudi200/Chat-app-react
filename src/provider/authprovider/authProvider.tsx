@@ -9,6 +9,10 @@ import { Session, User } from "@supabase/supabase-js";
 interface AuthContextType {
   user: User | null;
   session: Session | null;
+//StateContext 
+
+
+//action Context 
   signIn: (email: string, password: string) => Promise<void>;
   singUp:(    email: string,
     password: string,
