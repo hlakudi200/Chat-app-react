@@ -13,13 +13,10 @@ const About = () => {
   const navigate = useNavigate();
   const {user}=useAuth();
 
-
-  console.log(user?.id)
   useEffect(()=>{
       fetchUserProfile(user?.id);
   },[])
 
-  console.log(userProfile,"on About Page")
   const handleSignOut = () => {
     signOut().then(() => navigate("/"));
   };
