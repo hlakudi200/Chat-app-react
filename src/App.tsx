@@ -1,13 +1,22 @@
+import AuthLayout from "./layouts/authlayout";
+import { Route, Routes } from "react-router";
+import Signin from "./pages/auth/signin/signin";
 import Signup from "./pages/auth/signup/signup";
-import Signin from '../src/pages/auth/singin/sign'
-import Singin from "../src/pages/auth/singin/sign";
+import About from "./pages/about/about";
 
-
-function App() {
- 
+const App = () => {
   return (
-      <Singin />
-  )
-}
+    <Routes>
+      {/* Auth Route */}
+      <Route path="/" element={<AuthLayout />}>
+        <Route index element={<Signin />}></Route>
+        <Route path="/Singup" element={<Signup />}></Route>
+        {/* protect */}
 
-export default App
+        <Route path="/About" element={<About />}></Route>
+      </Route>
+    </Routes>
+  );
+};
+
+export default App;
