@@ -16,7 +16,7 @@ const About = () => {
 
   console.log(user?.id)
   useEffect(()=>{
-      fetchUserProfile(user?.id) //will update the intial state using dispacth action 
+      fetchUserProfile(user?.id) 
   },[])
 
   console.log(userProfile,"on About Page")

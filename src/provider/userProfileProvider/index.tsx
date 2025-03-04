@@ -11,9 +11,7 @@ import {
   IUserProfile,
 } from "./contexts";
 
-export const UserProfileProvider: React.FC<{ children: React.ReactNode }> = ({
-  children,
-}) => {
+export const UserProfileProvider: React.FC<{ children: React.ReactNode }> = ({children}) => {
   const { user } = useAuth();
   const [state, dispatch] = useThunkReducer(reducer, USER_CONTEXT_INITAL_STATE);
   
@@ -47,7 +45,7 @@ export const UserProfileProvider: React.FC<{ children: React.ReactNode }> = ({
     dispatch(deleteUserAction(userProfile));
   };
 
-  const value = { updateUserProfile, deleteUserProfile, fetchUserProfile };
+  const value = {updateUserProfile, deleteUserProfile, fetchUserProfile};
 
   return (
     <UserProfileStateContext.Provider value={state}>
