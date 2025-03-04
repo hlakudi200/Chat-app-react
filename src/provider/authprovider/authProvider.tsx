@@ -1,18 +1,10 @@
 // src/context/AuthContext.tsx
-import React, { createContext, useContext, useState, useEffect, useMemo } from "react";
+import React, { createContext, useContext, useState, useEffect} from "react";
 import supabase from "../../config/client";
 import { Session, User } from "@supabase/supabase-js";
-
-//context
-
-//add forgot password
 interface AuthContextType {
   user: User | null;
   session: Session | null;
-//StateContext 
-
-
-//action Context 
   signIn: (email: string, password: string) => Promise<void>;
   singUp:(    email: string,
     password: string,
@@ -36,6 +28,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
       setUser(session?.user ?? null);
+      console.log(user)
       setLoading(false);
     });
 
@@ -80,9 +73,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     if (error) throw error;
   };
 
-  const value=useMemo(()=>({ user, session, signIn, singUp,signOut }),[])
+  const values={ user, session, signIn, singUp,signOut }
   return (
-    <AuthContext.Provider value={value}>
+    <AuthContext.Provider value={values}>
       {!loading && children}
     </AuthContext.Provider>
   );
